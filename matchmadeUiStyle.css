@@ -8,6 +8,7 @@
     --yellow: #ffc800;
     --orange: #ff9600;
     --purple: #aa6ebe;
+    --navyDark: #161c37;
 }
 
 @font-face {
@@ -47,13 +48,13 @@ button {
     border-radius: 2rem;
     padding: 0.5rem 2rem 0.5rem 2rem;
     color: var(--aqua);
-    font-family: "GT Walsheim";
+    font-family: "GTWalsheim";
     font-size: 0.75rem;
     transition: 0.3s;
 }
 
 button:hover {
-    background-color: black;
+    background-color: var(--navyDark);
     transform: scale(1.05);
     cursor: pointer;
 }
