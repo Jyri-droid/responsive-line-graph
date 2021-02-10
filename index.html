@@ -42,6 +42,11 @@
     height: 1rem;
 }
 
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+}
+
 </style>
 </head>
 
@@ -56,8 +61,8 @@
     </div>
     <div class="yLabels" id="yLabelsFromJs"></div>
 </div>
-
-<br><button type="button" onclick="randomize()">Randomize</button>
+<br><br>
+<div class="buttonContainer"><button type="button" onclick="randomize()">Randomize</button></div>
 
 <!-- JS -->
 <script>
