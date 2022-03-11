@@ -12,7 +12,8 @@ convertThousandsToK = (item, index, array) => {
 
 separateThousands = (item, index, array) => {
     let number = item;
-    number = number.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, "&#8239;");
+    number = number.toString().replace(/.(?=(?:.{3})+$)/g, "&#8239;");
+    
     array[index] = number;
 }
 
