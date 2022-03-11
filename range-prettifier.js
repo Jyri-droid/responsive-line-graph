@@ -1,9 +1,3 @@
-sortNumbers = (number) => {
-    number.sort(function(a, b) {
-        return a - b;
-    });
-}
-
 getPowerOfTen = (number) => {
     let multiplier = "1";
     if (number >= 0) {
@@ -29,13 +23,11 @@ getDividingNumber = (number) => {
 }
 
 createSteps = (data) => {
-    let powerOfTen;
-    // Sort numbers from smallest to highest
-    sortNumbers(data);
     // Get smallest and highest numbers in data
-    let min = data[0];
-    let max = data[data.length - 1];
+    let min = Math.min(...data);
+    let max = Math.max(...data);
     // Check which one has bigger power of ten
+    let powerOfTen;
     if (getPowerOfTen(max) >= getPowerOfTen(min)) {
         powerOfTen = getPowerOfTen(max);
     } else {

@@ -25,7 +25,6 @@ createGraph = (data) => {
         datapointY[i] = (data[i] / Math.max(...intervals)) * graphHeight;
     }
 
-
     // Create intervals    
     for (i = 0; i < intervals.length; i++) {
         const backgroundLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
@@ -95,8 +94,6 @@ createGraph = (data) => {
 
 }
 
-createGraph(randomize());
-
 
 function randomize() {
    
@@ -119,3 +116,5 @@ function randomize() {
 
     createGraph(data);
 }
+
+randomize();
