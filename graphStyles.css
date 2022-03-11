@@ -1,0 +1,41 @@
+.container {
+	margin: 2rem 2rem 0 2rem;
+	display: flex;
+}
+
+.graphAndXLabels {
+	width: 100%;
+}
+
+.graph {
+	height: calc(120px + 0.5rem);
+	padding-top: 0.5rem;
+}
+
+.xLabels {
+	display: flex;
+	justify-content: space-around;
+	align-items: flex-end;
+	margin-top: 0.25rem;
+}
+
+.yLabels {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	height: calc(120px + 1rem);
+	margin-left: 0.5rem;
+}
+
+.yLabel:not(last-child) {
+	height: 100%;
+}
+
+.yLabel:last-child {
+	height: 1rem;
+}
+
+.buttonContainer {
+	display: flex;
+	justify-content: center;
+}

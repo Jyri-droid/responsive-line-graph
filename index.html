@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html>
 
-<!-- CSS -->
 <head>
-<link rel="stylesheet" type="text/css" href="matchmadeUiStyle.css" media="screen"/>
-<link rel="stylesheet" type="text/css" href="styles.css" media="screen"/>    
+    <meta name="author" content="Jyri Konttinen">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="styles.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="graphStyles.css" media="screen"/>    
 </head>
 
 <body>
 
-<div class="container">
-    <div class="graphAndXLabels">
-        <div class="graph"><svg id="graphSvg" height="100%" width="100%" overflow="visible"></svg></div>
-        <div class="xLabels" id="xLabelsFromJs"></div>
+    <div class="container">
+        <div class="graphAndXLabels">
+            <div class="graph"><svg id="graphSvg" height="100%" width="100%" overflow="visible"></svg></div>
+            <div class="xLabels" id="xLabelsFromJs"></div>
+        </div>
+        <div class="yLabels" id="yLabelsFromJs"></div>
     </div>
-    <div class="yLabels" id="yLabelsFromJs"></div>
-</div>
-<br><br>
-<div class="buttonContainer"><button type="button" onclick="randomize()">Randomize</button></div>
+    <br><br>
+    <div class="buttonContainer"><button type="button" onclick="randomize()">Randomize</button></div>
 
-<script src="scripts.js"></script>
+    <script src="range-prettifier.js"></script>
+    <script src="scripts.js"></script>
+
 
 </body>
+
 </html>

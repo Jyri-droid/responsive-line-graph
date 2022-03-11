@@ -1,76 +1,80 @@
-var data = [200, 3000, 16000, 24000, 64000, 48123];
-var graphHeight = 120;
-var amountOfBackgroundLines = 5;
 
-function createGraph() {
-    var dataAccumulated = [0];
-    var circleY = [];
-    
-    // Accumulate data
+let graphHeight = 120;
+
+convertThousandsToK = (item, index, array) => {
+    let number = item;
+    if (number > 999) {
+        number = (Math.round((number / 1000) * 100) / 100).toFixed(0);
+        number = number + "k";
+    }
+    array[index] = number;
+}
+
+separateThousands = (item, index, array) => {
+    let number = item;
+    number = number.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, "&#8239;");
+    array[index] = number;
+}
+
+createGraph = (data) => {
+    let datapointY = [];
+    const intervals = createSteps(data);
+
+    // Convert data to datapointY while making it relative to graphHeight
     for (i = 0; i < data.length; i++) {
-        if (i == 0) {
-        dataAccumulated[i] = data[i];
-        } else {
-            dataAccumulated[i] = dataAccumulated[i - 1] + data[i];
-        }
+        datapointY[i] = (data[i] / Math.max(...intervals)) * graphHeight;
     }
 
-    // Convert dataAccumulated to circleY while making it relative to graphHeight
-    for (i = 0; i < dataAccumulated.length; i++) {
-        circleY[i] = (dataAccumulated[i] / Math.max(...dataAccumulated)) * graphHeight;
-    }
 
-    // Create background lines
-    for (i = 0; i < amountOfBackgroundLines; i++) {
+    // Create intervals    
+    for (i = 0; i < intervals.length; i++) {
         const backgroundLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
         backgroundLine.setAttribute("x1", "0%");
         backgroundLine.setAttribute("x2", "100%");
-        backgroundLine.setAttribute("y1", (graphHeight / (amountOfBackgroundLines - 1)) * i);
-        backgroundLine.setAttribute("y2", (graphHeight / (amountOfBackgroundLines - 1)) * i);
-        backgroundLine.setAttribute("stroke", "white");
+        backgroundLine.setAttribute("y1", (graphHeight / (intervals.length - 1)) * i);
+        backgroundLine.setAttribute("y2", (graphHeight / (intervals.length - 1)) * i);
+        backgroundLine.setAttribute("stroke", "var(--intervalColor)");
         backgroundLine.setAttribute("stroke-width", "1");
         graphSvg.appendChild(backgroundLine);
     }
 
     // Create green lines
-    var graphMargin = 100 / data.length;
-
-    // Create green lines
-    for (i = 0; i < circleY.length - 1; i++) {
+    const graphMargin = 100 / data.length;
+    for (i = 0; i < datapointY.length - 1; i++) {
         const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        line.setAttribute("x1", (100 - graphMargin) / (dataAccumulated.length - 1) * i + (graphMargin / 2) + "%");
-        line.setAttribute("x2", (100 - graphMargin) / (dataAccumulated.length - 1) * (i + 1) + (graphMargin / 2) + "%");
-        line.setAttribute("y1", graphHeight - circleY[i]);
-        line.setAttribute("y2", graphHeight - circleY[i + 1]);
-        line.setAttribute("stroke", "var(--green)");
-        line.setAttribute("stroke-width", "4");
+        line.setAttribute("x1", (100 - graphMargin) / (data.length - 1) * i + (graphMargin / 2) + "%");
+        line.setAttribute("x2", (100 - graphMargin) / (data.length - 1) * (i + 1) + (graphMargin / 2) + "%");
+        line.setAttribute("y1", graphHeight - datapointY[i]);
+        line.setAttribute("y2", graphHeight - datapointY[i + 1]);
+        line.setAttribute("stroke", "var(--graphColor)");
+        line.setAttribute("stroke-width", "2");
         graphSvg.appendChild(line);
     }
 
     // Create green circles
-    for (i = 0; i < circleY.length; i++) {
+    for (i = 0; i < datapointY.length; i++) {
         const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        circle.setAttribute("cx", (graphMargin / 2) + (100 - graphMargin) / (dataAccumulated.length - 1) * i + "%");
-        circle.setAttribute("cy", graphHeight - circleY[i]);
-        circle.setAttribute("r", "5");    
-        circle.setAttribute("stroke", "var(--green)");
-        circle.setAttribute("stroke-width", "4");
-        circle.setAttribute("fill", "var(--greyBackground)");
+        circle.setAttribute("cx", (graphMargin / 2) + (100 - graphMargin) / (data.length - 1) * i + "%");
+        circle.setAttribute("cy", graphHeight - datapointY[i]);
+        circle.setAttribute("r", "3");    
+        circle.setAttribute("stroke", "var(--graphColor)");
+        circle.setAttribute("stroke-width", "2");
+        circle.setAttribute("fill", "var(--backgroundColor)");
         graphSvg.appendChild(circle);
     }
 
     // Create xLabels 
-    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Oct", "Sep", "Nov", "Dec"]
-    var d = new Date();
-    var currentMonth = d.getMonth();
-    var monthsBack = [];
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Oct", "Sep", "Nov", "Dec"]
+    const d = new Date();
+    const currentMonth = d.getMonth();
+    let monthsBack = [];
 
     for (i = data.length - 1; i > -1; i--) {
         monthsBack[i] = currentMonth - i;
         if (monthsBack[i] < 0) {
             monthsBack[i] = currentMonth - i + 12;
         }
-        var labelDiv = document.createElement("div");
+        const labelDiv = document.createElement("div");
         if (i == 0) { 
             labelDiv.innerHTML = "<strong>Now</>";
         } else {
@@ -80,28 +84,19 @@ function createGraph() {
     }
 
     // Count yLabel values
-    var yLabels = [];
-
-    for (i = 0; i < amountOfBackgroundLines; i++) {
-        yLabels[i] = (Math.min(...dataAccumulated) + (((Math.max(...dataAccumulated) - Math.min(...dataAccumulated)) / (amountOfBackgroundLines - 1)) * i));
-        if (yLabels[i] > 999) {
-            yLabels[i] = (Math.round((yLabels[i] / 1000) * 100) / 100).toFixed(0);
-            yLabels[i] = yLabels[i] + "k";
-        }
-        yLabels[i] = "$" + yLabels[i];
-    }
-
+    intervals.forEach(separateThousands);
     // Create yLabel divs in reverse order
-    for (i = amountOfBackgroundLines - 1; i > -1; i--) {
+    for (i = intervals.length - 1; i > -1; i--) {
         var yLabel = document.createElement("div");
-        yLabel.innerHTML = yLabels[i];
+        yLabel.innerHTML = intervals[i];
         yLabel.classList.add("yLabel");
         document.getElementById("yLabelsFromJs").appendChild(yLabel);
     }
 
 }
 
-createGraph();
+createGraph(randomize());
+
 
 function randomize() {
    
@@ -109,7 +104,7 @@ function randomize() {
     data = [];
     var dataEnd = Math.floor(Math.random() * 6);
     for (i = 0; i < 4 + dataEnd; i++) {
-        data[i] = Math.floor(Math.random() * 50000) + 1;
+        data[i] = Math.floor(Math.random() * 500000) + 1;
     }
 
     // Clear labels
@@ -122,5 +117,5 @@ function randomize() {
         svgToBeCleared.removeChild(svgToBeCleared.lastChild);
     }
 
-    createGraph();
+    createGraph(data);
 }
