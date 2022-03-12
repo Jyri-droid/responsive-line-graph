@@ -12,7 +12,7 @@ convertThousandsToK = (item, index, array) => {
 
 separateThousands = (item, index, array) => {
     let number = item;
-    number = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "&#8239;");
+    number = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     array[index] = number;
 }
 
@@ -67,6 +67,7 @@ createGraph = (data) => {
     }
 
     // Create tooltips
+    data.forEach(separateThousands);
     for (i = 0; i < datapointY.length; i++) {
         const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
         text.setAttribute("x", (100 - graphMargin) / (data.length - 1) * i + (graphMargin / 2) + 1 + "%");
