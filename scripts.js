@@ -12,8 +12,7 @@ convertThousandsToK = (item, index, array) => {
 
 separateThousands = (item, index, array) => {
     let number = item;
-    number = number.toString().replace(/.(?=(?:.{3})+$)/g, "&#8239;");
-    
+    number = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "&#8239;");
     array[index] = number;
 }
 
@@ -23,8 +22,10 @@ createGraph = (data) => {
 
     // Convert data to datapointY while making it relative to graphHeight
     for (i = 0; i < data.length; i++) {
-        datapointY[i] = (data[i] / Math.max(...intervals)) * graphHeight;
+        datapointY[i] = (data[i] / Math.max(...data) * graphHeight);
     }
+
+    console.log("The data: " + data + " The intervals: " + intervals);
 
     // Create intervals    
     for (i = 0; i < intervals.length; i++) {
@@ -61,6 +62,16 @@ createGraph = (data) => {
         circle.setAttribute("stroke-width", "2");
         circle.setAttribute("fill", "var(--backgroundColor)");
         graphSvg.appendChild(circle);
+    }
+
+    // Create tooltips
+    for (i = 0; i < datapointY.length; i++) {
+        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("x", (100 - graphMargin) / (data.length - 1) * i + (graphMargin / 2) + 1 + "%");
+        text.setAttribute("y", graphHeight - datapointY[i]);
+        text.setAttribute("fill", "white");
+        text.textContent = data[i];
+        graphSvg.appendChild(text);
     }
 
     // Create xLabels 
