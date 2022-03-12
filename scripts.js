@@ -17,6 +17,8 @@ separateThousands = (item, index, array) => {
 }
 
 createGraph = (data) => {
+
+    const graphSvg = document.getElementById("graphSvg");
     let datapointY = [];
     const intervals = createSteps(data);
 

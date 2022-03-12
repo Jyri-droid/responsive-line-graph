@@ -45,6 +45,12 @@ button:hover {
 
 button:focus { outline:0; }
 
+
+.graph:hover .tooltip {
+    opacity: 1;
+}
+
 .tooltip {
+    opacity: 0;
     text-shadow: 0px 0px 5px black;
 }
