@@ -71,6 +71,7 @@ createGraph = (data) => {
         text.setAttribute("y", graphHeight - datapointY[i]);
         text.setAttribute("fill", "white");
         text.textContent = data[i];
+        text.classList.add("tooltip");
         graphSvg.appendChild(text);
     }
 
